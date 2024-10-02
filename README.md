@@ -15,4 +15,4 @@ This is a video I made going over the project, my implementation of grid, flexbo
 link to the screen record:
 https://www.loom.com/share/d1ffc4168d1b4773847e3767e055db9c?sid=926ad2d9-9fe1-4a57-9645-a1a7adf960f3
 
-This is the link to the project in GitHub: git@github.com:Raquel-LT3/se_project_aroundtheus.git
+This is the link to the project in GitHub: https://github.com/Raquel-LT3/se_project_aroundtheus.git
