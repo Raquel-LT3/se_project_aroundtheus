@@ -9,7 +9,7 @@
     grid-template-areas: 
         "title button"
         "description description";
-    grid-template-columns: minmax(auto, 300px) auto;
+    grid-template-columns: minmax(auto, 390px) auto;
 }
 
 .profile__image {
@@ -61,7 +61,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 373px;
+    max-width: 600px;
 }
 
 .profile__description {
