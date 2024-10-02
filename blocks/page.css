@@ -16,8 +16,6 @@
     box-sizing: border-box;
     position: relative;
     margin: 0 auto;
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
 @media screen and (max-width:581px) {
@@ -28,26 +26,4 @@
       .page__section {
           width:282px;
       }
-  
-      .content {
-        max-width: 282px;
-        padding: 0 10px;
-        margin: 0 auto;
-      }
-}
-
-@media screen and (max-width: 320px) {
-    .page__content {
-      box-sizing: border-box;
-    }
-
-    .page__section {
-        width:282px;
-    }
-
-    .content {
-      max-width: 282px;
-      padding: 0 10px;
-      margin: 0 auto;
-    }
-}
+ }
