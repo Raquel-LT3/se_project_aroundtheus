@@ -2,6 +2,8 @@
     display: flex;
     align-items: center;
     margin-top: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .profile__info {
@@ -31,8 +33,8 @@
     align-self: center;
     cursor: pointer;
     transition: 0.3s;
-    padding-left: 1px;
-    padding-right: 1px;
+    margin-left: 5px;
+    margin-right: 5px;
 } 
 
 .profile__edit-button:hover {
@@ -49,7 +51,7 @@
     cursor: pointer;
     transition: 0.3s;
     margin-left: auto;
-    padding:0;
+    
 }
 
 .profile__add-button:hover {
@@ -91,9 +93,11 @@
     .profile__info {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
-        align-items:baseline;
+        justify-content: center;
+        align-items:baselign;
         width: 100%;
+        margin-top: 30px;
+        column-gap:10px
     }
 
     .profile__image {
@@ -104,7 +108,6 @@
     .profile__title {
         font-size:22px;
         line-height: 26.63px;
-        margin: 26.25px 0 14px 0;
         text-align: center;
     }
 
