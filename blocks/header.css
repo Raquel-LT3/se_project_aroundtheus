@@ -17,3 +17,9 @@
         width: 126px;
     }
 }
+
+@media screen and (max-width:320px) {
+    .header {
+        
+    }
+}
