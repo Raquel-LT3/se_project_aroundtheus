@@ -1,4 +1,4 @@
-const initalCards = [
+const initialCards = [ 
     {
         name: "Yosemite Valley",
         link: "https://images.unsplash.com/photo-1498429089284-41f8cf3ffd39?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDF8fHlvc2VtaXRlJTIwbmF0aW9uYWwlMjBwYXJrfGVufDB8fDB8fHww",
@@ -25,4 +25,4 @@ const initalCards = [
     },
 ];
 
-console.log(initalCards);
+console.log(initialCards);
