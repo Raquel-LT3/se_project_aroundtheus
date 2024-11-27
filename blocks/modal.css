@@ -11,8 +11,7 @@
     display: none;
 }
 
-.modal_opened {
-    visibility: hidden;
+.modal__opened {
     display: flex;
 }
 
