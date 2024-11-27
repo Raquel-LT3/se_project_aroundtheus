@@ -90,7 +90,7 @@ input[type=text] {
 
 
 @media screen and (max-width:661px) {
-    .modal__close-button {
+    .modal__close {
         width: 26px;
         height: 26px;
         bottom: calc(100% + 30px);
