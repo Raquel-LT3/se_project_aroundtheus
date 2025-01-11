@@ -39,11 +39,12 @@
             <p class="footer__copyright">© 2024 Around the U.S.</P>
         </footer>
     </div>
+    <!-----Edit modal----->
     <div class="modal" id="profile-edit-modal">
         <div class="modal__container">
-            <button class="modal__close" id="profile-close-button"></button>
+            <button class="modal__close" id="profile-edit-close-button"></button>
             <p class="modal__heading">Edit profile</p>
-            <form class="modal__profile-form" id="modal-profile-form">
+            <form class="modal__form" id="modal-profile-form">
                <input 
                class="modal__input"
                id ="profile-title-input"
@@ -62,6 +63,41 @@
             </form>
         </div>
     </div>
+    <!-----Add Card modal----->
+    <div class="modal" id="profile-add-modal">
+        <div class="modal__container">
+            <button class="modal__close" id="profile-add-close-buton" type="button"></button>
+            <p class="modal__heading">New Place</p>
+            <form class="modal__form" id="add-card-form">
+               <input 
+               class="modal__input"
+               id ="modal-title-input"
+               type="text" 
+               name="title"
+               placeholder="Title"
+               />
+               <input 
+               class="modal__input"
+               id ="modal-input-url"
+               type="text"
+                name="url"
+                placeholder="Image url"
+                />
+               <button class="modal__button">Create</button>
+            </form>
+        </div>
+    </div>
+
+    <!---Image Modal----->
+    <div class="modal" id="image__open-modal">
+        <div class="modal__container modal__container_preview_image">
+            <img class="modal__image" src="" alt="" />
+            <button class="modal__close" id="profile-close-button"></button>
+           <button id="image__close-button" class="modal__close" type="button"></button>
+        <p class="modal__caption" id="caption"></p>
+      </div>
+    </div>
+    
     <template id="card-template">
         <li class="card">
             <img 
@@ -72,6 +108,7 @@
             <div class="card__description">
                 <h2 class="card__title"></h2>
                 <button class="card__like-button" type="button"></button>
+                <button class="card__delete-button" type="button"></button>
             </div>
         </li>
     </template>
