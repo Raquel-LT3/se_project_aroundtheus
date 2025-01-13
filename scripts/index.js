@@ -88,7 +88,7 @@ function getCardElement(data) {
     cardTitleEl.textContent = data.name;
   
     likeButton.addEventListener("click", () => {
-      likeButton.classList.toggle("card__like-button_active");l
+      likeButton.classList.toggle("card__like-button_active");
     });
     deleteButton.addEventListener("click", () => {
       cardElement.remove();

@@ -8,11 +8,14 @@
     bottom: 0;
     left: 0;
     padding: 0 19px;
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
 }
 
 .modal_opened {
-    display: flex;
+    visibility: visible;
+    opacity: 1;
 }
 
 .modal__container {
