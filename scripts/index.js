@@ -86,10 +86,6 @@ const handleOpenImage = (cardData) => {
   openModal(imageOpenModal);
 };
 
-imageRemoveButton.addEventListener("click", () => {
-  closePopup(imageOpenModal);
-});
-
 function getCardElement(data) {
   const cardElement = cardTemplate.cloneNode(true);
   const cardImageEl = cardElement.querySelector(".card__image");
