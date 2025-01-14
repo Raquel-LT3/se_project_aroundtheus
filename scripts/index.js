@@ -68,6 +68,10 @@ function openModal(modal) {
   modal.classList.add("modal_opened");
 }
 
+function closePopup(modal) {
+  modal.classList.remove("modal_opened");
+}
+
 const closeButtons = document.querySelectorAll(".modal__close");
 
 closeButtons.forEach((button) => {
