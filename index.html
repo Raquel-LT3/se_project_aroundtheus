@@ -59,9 +59,8 @@
         <button class="modal__close" id="profile-edit-close-button"></button>
         <p class="modal__heading">Edit profile</p>
         <form class="modal__form" id="modal-profile-form" required>
-          <label class="modal__label">
             <input
-              class="modal__input modal__input_type_name"
+              class="modal__input"
               id="profile-title-input"
               type="text"
               name="title"
@@ -73,10 +72,8 @@
             <span class="modal__error" id="profile-title-input-error"
               >Please fill out this field.</span
             >
-          </label>
-          <label class="modal__label">
             <input
-              class="modal__input modal__input_type_description"
+              class="modal__input"
               id="profile-description-input"
               type="text"
               name="description"
@@ -88,8 +85,7 @@
             <span class="modal__error" id="profile-description-input-error"
               >Please fill out this field.</span
             >
-          </label>
-          <button class="modal__button">Save</button>
+            <button class="modal__button">Save</button>
         </form>
       </div>
     </div>
@@ -103,7 +99,6 @@
         ></button>
         <p class="modal__heading">New Place</p>
         <form class="modal__form" id="add-card-form">
-          <label class="modal__label">
             <input
               class="modal__input modal__input_type_card_name"
               id="modal__input_type_title"
@@ -114,25 +109,18 @@
               maxlength="30"
               required
             />
-            <span class="modal__error" id="modal__input_type_title-error"
-              >Please fill out this field.
-            >
-          </label>
-          <label class="modal__label">
+            <span class="modal__error" id="modal__input_type_title-error"> Please fill out this field.  </span>
             <input
               class="modal__input modal__input_type_card_url"
               id="modal__input_type_url"
               type="url"
-              name="url"
+              name="url"  
               placeholder="Image url"
               required
             />
-            <span class="modal__error" id="modal__input_type_url-error"
-              >Please fill web address.
-            >
-          </label>
-          <button class="modal__button" disabled >Create</button>
-        </form>
+            <span class="modal__error" id="modal__input_type_url-error"> Please fill web address. </span> 
+            <button class="modal__button" disabled >Create</button>
+          </form>
       </div>
     </div>
 

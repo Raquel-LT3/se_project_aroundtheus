@@ -2,6 +2,7 @@
   font-family: "Inter", Arial, Helvetica, sans-serif;
   font-weight: 900;
   margin-top: 51px;
+
 }
 
 .card {
@@ -9,6 +10,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .cards__list {

@@ -66,7 +66,7 @@ function fillProfileForm() {
 
 function openModal(modal) {
   modal.classList.add("modal_opened");
-  document.removeEventListener("keyup", handleEscape);
+  document.addEventListener("keyup", handleEscape);
 }
 
 function closePopup(modal) {
