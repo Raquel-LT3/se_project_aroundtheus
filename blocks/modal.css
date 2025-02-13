@@ -129,12 +129,13 @@
 
 .modal__error {
   position: absolute;
-  text-align: center;
+  text-align: left;
   font-family: "Inter", "Arial", sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 15px;
   color: rgba(255, 0, 0, 1);
+  padding-right: 15px;
   opacity: 0;
   visibility: hidden;
 }
