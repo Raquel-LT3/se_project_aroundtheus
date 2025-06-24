@@ -1,33 +1,47 @@
+import Card from "../components/Card.js";
+
+import FormValidator from "../components/FormValidator.js";
+
+import { config } from "../scripts/validation.js";
+
 const initialCards = [
   {
     name: "Yosemite Valley",
+
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/yosemite.jpg",
   },
-  {
+ {
     name: "Lake Louise",
+
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/lake-louise.jpg",
   },
-  {
+
+ {
     name: "Bald Mountains",
+
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/bald-mountains.jpg",
   },
-  {
+{
     name: "Latemar",
+
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/latemar.jpg",
   },
-  {
+{
     name: "Vanoise National Park",
+
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/vanoise.jpg",
   },
   {
     name: "Lago di Braies",
+
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/lago.jpg",
   },
 ];
 
 /*-------------------------------------------------------------------------------*/
-/*                                 Elements                                      */
+/*                                  Elements                                     */
 /*-------------------------------------------------------------------------------*/
+
 const profileEditButton = document.querySelector("#profile-edit-button");
 const profileEditModal = document.querySelector("#profile-edit-modal");
 const profileAddModal = document.querySelector("#profile-add-modal");
@@ -57,10 +71,12 @@ const previewCaption = imageOpenModal.querySelector(".modal__caption");
 const imageRemoveButton = document.querySelector("#image__close-button");
 
 /*-------------------------------------------------------------------------------*/
-/*                                 Functions                                     */
+/*                                Functions                                      */
 /*-------------------------------------------------------------------------------*/
+
 function fillProfileForm() {
   profileTitleInput.value = profileTitle.textContent;
+
   profileDescriptionInput.value = profileDescription.textContent;
 }
 
@@ -74,12 +90,11 @@ function closePopup(modal) {
   document.removeEventListener("keyup", handleEscape);
 }
 
-const closeButtons = document.querySelectorAll(".modal__close");
-
-closeButtons.forEach((button) => {
-  const popup = button.closest(".modal");
-  button.addEventListener("click", () => closePopup(popup));
-});
+function renderCard(cardData, container) {
+  const card = new Card(cardData, "#card-template", handleOpenImage);
+  const cardElement = card.getView();
+  container.prepend(cardElement);
+}
 
 const handleOpenImage = (cardData) => {
   previewImage.src = cardData.link;
@@ -88,36 +103,17 @@ const handleOpenImage = (cardData) => {
   openModal(imageOpenModal);
 };
 
-function getCardElement(data) {
-  const cardElement = cardTemplate.cloneNode(true);
-  const cardImageEl = cardElement.querySelector(".card__image");
-  const cardTitleEl = cardElement.querySelector(".card__title");
-  const likeButton = cardElement.querySelector(".card__like-button");
-  const deleteButton = cardElement.querySelector(".card__delete-button");
+const closeButtons = document.querySelectorAll(".modal__close");
 
-  cardImageEl.src = data.link;
-  cardImageEl.alt = data.name;
-  cardTitleEl.textContent = data.name;
-
-  likeButton.addEventListener("click", () => {
-    likeButton.classList.toggle("card__like-button_active");
-  });
-  deleteButton.addEventListener("click", () => {
-    cardElement.remove();
-  });
-  cardImageEl.addEventListener("click", () => handleOpenImage(data));
-
-  return cardElement;
-}
-
-function renderCard(data) {
-  const cardElement = getCardElement(data);
-  cardListEl.prepend(cardElement);
-}
+closeButtons.forEach((button) => {
+  const popup = button.closest(".modal");
+  button.addEventListener("click", () => closePopup(popup));
+});
 
 /*-------------------------------------------------------------------------------*/
-/*                                 Event Handlers                                */
+/*                               Event Handlers                                  */
 /*-------------------------------------------------------------------------------*/
+
 function handleProfileEditSubmit(e) {
   e.preventDefault();
   profileTitle.textContent = profileTitleInput.value;
@@ -130,10 +126,12 @@ function handleProfileAddSubmit(e) {
   const name = cardTitleInput.value;
   const link = cardUrlInput.value;
   renderCard({ name, link }, cardListEl);
-  closePopup(profileAddModal);
-  e.target.reset();
+  closePopup(profileAddModal); // Close the popup first or concurrently
+  e.target.reset(); // Reset the form inputs
+  addFormValidator.resetValidation(); // This will clear errors and disable the button for next time
 }
 
+// Handle Escape key to close modals
 const handleEscape = (e) => {
   if (e.key === "Escape") {
     const openModal = document.querySelector(".modal_opened");
@@ -154,17 +152,26 @@ document.querySelectorAll(".modal").forEach((modal) => {
 });
 
 /*-------------------------------------------------------------------------------*/
-/*                                 Event Listeners                               */
+/*                           Event Listeners                                     */
 /*-------------------------------------------------------------------------------*/
+
 profileEditButton.addEventListener("click", () => {
   fillProfileForm();
   openModal(profileEditModal);
 });
 
 profileEditForm.addEventListener("submit", handleProfileEditSubmit);
+
 profileAddForm.addEventListener("submit", handleProfileAddSubmit);
 
 initialCards.forEach((cardData) => renderCard(cardData, cardListEl));
 
-
 addNewCardButton.addEventListener("click", () => openModal(profileAddModal));
+
+const editFormValidator = new FormValidator(config, profileEditForm);
+
+editFormValidator.enableValidation();
+
+const addFormValidator = new FormValidator(config, profileAddForm);
+
+addFormValidator.enableValidation();
