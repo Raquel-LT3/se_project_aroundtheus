@@ -25,7 +25,7 @@ class FormValidator {
   }
 
   _hasInvalidInput() {
-    return !this._inputList.every((inputEl) => inputEl.validity.valid);
+    return !this._inputList.every((inputEl) => inputEl.validity.valid); // Check if all inputs are valid
   }
 
   _setEventListeners() {
@@ -34,7 +34,7 @@ class FormValidator {
         this._checkInputValidity(inputElement);
         this._toggleButtonState();
       });
-    });
+    }); //
 
     this._toggleButtonState(); // Set initial button state when listeners are active
   }
@@ -63,7 +63,6 @@ class FormValidator {
 
   // Resets the validation state of the form
   resetValidation() {
-    // 1. Clear all input error messages and remove input error styling
     this._inputList.forEach(inputElement => {
       const errorMessageEl = this._form.querySelector(
         `#${inputElement.id}-error`
@@ -76,14 +75,14 @@ class FormValidator {
       }
     });
 
-    // 2. Disable the submit button
-    this.disableSubmitButton();
+    
+    this.disableSubmitButton(); // Reuse the disable method to reset button state
   }
 
   enableValidation() {
     this._form.addEventListener("submit", (e) => {
     });
-    this._setEventListeners();
+    this._setEventListeners(); // Initialize event listeners for inputs
   }
 }
 
