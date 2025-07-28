@@ -1,3 +1,5 @@
+// components/FormValidator.js
+
 class FormValidator {
   constructor(settings, formElement) {
     this._formSelector = settings.formSelector;
@@ -80,8 +82,6 @@ class FormValidator {
   }
 
   enableValidation() {
-    this._form.addEventListener("submit", (e) => {
-    });
     this._setEventListeners(); // Initialize event listeners for inputs
   }
 }
