@@ -1,6 +1,6 @@
 export default class Card {
   constructor(
-    { name, link, _id = Date.now().toString(), likes = [] }, // <-- defaults
+    { name, link, _id, likes = [], owner }, // API data
     cardSelector,
     handleCardClick,
     handleLikeClick,
@@ -11,6 +11,7 @@ export default class Card {
     this._link = link;
     this._id = _id;
     this._likes = likes;
+    this._owner = owner || { _id: userId }; // fallback for initial cards
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
     this._handleLikeClick = handleLikeClick;
@@ -26,29 +27,35 @@ export default class Card {
   }
 
   _setEventListeners() {
+    // Like button
     this._likeButton.addEventListener("click", () => {
       this._handleLikeClick(
         this._id,
         this.isLiked(),
-        this._updateLikes.bind(this)
+        this._toggleLike.bind(this)
       );
     });
 
-    this._deleteButton.addEventListener("click", () => {
-      this._handleDeleteClick(this._id, this._cardElement);
-    });
+    // Delete button
+    if (this._deleteButton) {
+      this._deleteButton.addEventListener("click", () => {
+        this._handleDeleteClick(this._id, this._cardElement);
+      });
+    }
 
+    // Image click
     this._cardImage.addEventListener("click", () => {
       this._handleCardClick({ link: this._link, name: this._name });
     });
   }
 
-  _updateLikes(newLikes) {
-    this._likes = newLikes;
+  _toggleLike() {
     if (this.isLiked()) {
-      this._likeButton.classList.add("card__like-button_active");
-    } else {
       this._likeButton.classList.remove("card__like-button_active");
+      this._likes = this._likes.filter((id) => id !== this._userId);
+    } else {
+      this._likeButton.classList.add("card__like-button_active");
+      this._likes.push(this._userId);
     }
   }
 
@@ -70,9 +77,17 @@ export default class Card {
     this._cardImage.alt = this._name;
     this._cardTitle.textContent = this._name;
 
-    this._updateLikes(this._likes); // set initial like state
-    this._setEventListeners();
+    // Hide delete button if not owner
+    if (this._owner._id !== this._userId && this._deleteButton) {
+      this._deleteButton.style.display = "none";
+    }
 
+    // Initialize like state
+    if (this.isLiked()) {
+      this._likeButton.classList.add("card__like-button_active");
+    }
+
+    this._setEventListeners();
     return this._cardElement;
   }
 }
