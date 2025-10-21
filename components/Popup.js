@@ -1,5 +1,4 @@
 // components/Popup.js
-
 export default class Popup {
   constructor({ popupSelector }) {
     this._popup = document.querySelector(popupSelector);
@@ -18,7 +17,7 @@ export default class Popup {
     this._popup.removeEventListener("mousedown", this._handleOverlayClose);
   }
 
-  _handleEscClose = (evt) => { // Close popup on Escape key press
+  _handleEscClose = (evt) => {
     if (evt.key === "Escape") {
       this.close();
     }

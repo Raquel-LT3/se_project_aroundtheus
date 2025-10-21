@@ -1,9 +1,10 @@
+// components/UserInfo.js
 export default class UserInfo {
-    // Constructor to initialize the UserInfo with selectors for name and job elements
-    // This class is used to manage user information displayed on the page
-  constructor({ nameSelector, jobSelector }) {
+  constructor({ nameSelector, jobSelector, avatarSelector }) {
     this._nameElement = document.querySelector(nameSelector);
     this._jobElement = document.querySelector(jobSelector);
+    this._avatarElement = document.querySelector(avatarSelector);
+    this._userId = null; // store userId
   }
 
   getUserInfo() {
@@ -16,5 +17,17 @@ export default class UserInfo {
   setUserInfo({ name, job }) {
     this._nameElement.textContent = name;
     this._jobElement.textContent = job;
+  }
+
+  setAvatar(avatarUrl) {
+    this._avatarElement.src = avatarUrl;
+  }
+
+  setUserId(id) {
+    this._userId = id;
+  }
+
+  getUserId() {
+    return this._userId;
   }
 }

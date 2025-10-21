@@ -1,3 +1,4 @@
+        // VS Code settings for Live Server setting.json
 {
     "liveServer.settings.port": 5501
 }

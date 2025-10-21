@@ -18,6 +18,39 @@
   margin: 0 auto;
 }
 
+/* This container is the new parent of the profile image. */
+.profile__image-container {
+  position: relative; 
+  cursor: pointer;
+  border-radius: 50%; 
+  overflow: hidden; 
+  width: 120px;
+  height: 120px;
+  margin-right: 24px;
+}
+
+
+.profile__image-edit-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  background-image: url('../images/edit-icon.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 26px 26px; 
+  border: none;
+  opacity: 0; 
+  transition: opacity 0.3s ease; 
+}
+
+
+.profile__image-container:hover .profile__image-edit-button {
+  opacity: 1;
+}
+
 @media screen and (max-width: 581px) {
   .page__content {
     box-sizing: border-box;

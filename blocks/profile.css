@@ -21,6 +21,42 @@
   object-fit: cover;
   background-position: center;
   margin-right: 24px;
+
+}
+
+/* --- Avatar hover & overlay --- */
+.profile__image-wrapper {
+  position: relative;
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 24px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.profile__image-hover {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.profile__image-wrapper:hover .profile__image-hover {
+  opacity: 1;
+}
+
+.profile__image-edit-icon {
+  width: 26px;
+  height: 26px;
+  background: url("../images/edit-icon.svg") center no-repeat;
+  background-size: contain;
+  pointer-events: none;
 }
 
 .profile__edit-button {

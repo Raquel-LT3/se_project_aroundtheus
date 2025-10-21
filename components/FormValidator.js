@@ -1,5 +1,4 @@
 // components/FormValidator.js
-
 class FormValidator {
   constructor(settings, formElement) {
     this._formSelector = settings.formSelector;
@@ -19,7 +18,7 @@ class FormValidator {
 
   _toggleButtonState() {
     if (this._hasInvalidInput()) {
-      this.disableSubmitButton(); // Reusing the public disable method
+      this.disableSubmitButton();
       return;
     }
     this._submitButtonElement.classList.remove(this._inactiveButtonClass);
@@ -27,7 +26,7 @@ class FormValidator {
   }
 
   _hasInvalidInput() {
-    return !this._inputList.every((inputEl) => inputEl.validity.valid); // Check if all inputs are valid
+    return !this._inputList.every((inputEl) => inputEl.validity.valid);
   }
 
   _setEventListeners() {
@@ -36,9 +35,8 @@ class FormValidator {
         this._checkInputValidity(inputElement);
         this._toggleButtonState();
       });
-    }); //
-
-    this._toggleButtonState(); // Set initial button state when listeners are active
+    });
+    this._toggleButtonState();
   }
 
   _checkInputValidity(inputElement) {
@@ -50,39 +48,33 @@ class FormValidator {
       errorMessageEl.textContent = inputElement.validationMessage;
       errorMessageEl.classList.add(this._errorClass);
     } else {
-        // If the input is valid, remove error styling and message
       inputElement.classList.remove(this._inputErrorClass);
       errorMessageEl.textContent = "";
       errorMessageEl.classList.remove(this._errorClass);
     }
   }
 
-  // Disables the submit button and applies inactive styling
   disableSubmitButton() {
     this._submitButtonElement.classList.add(this._inactiveButtonClass);
     this._submitButtonElement.disabled = true;
   }
 
-  // Resets the validation state of the form
   resetValidation() {
-    this._inputList.forEach(inputElement => {
+    this._inputList.forEach((inputElement) => {
       const errorMessageEl = this._form.querySelector(
         `#${inputElement.id}-error`
       );
-      // Reuse the logic from the 'else' block of _checkInputValidity
       inputElement.classList.remove(this._inputErrorClass);
-      if (errorMessageEl) { // Check if errorMessageEl exists before accessing properties
+      if (errorMessageEl) {
         errorMessageEl.textContent = "";
         errorMessageEl.classList.remove(this._errorClass);
       }
     });
-
-    
-    this.disableSubmitButton(); // Reuse the disable method to reset button state
+    this.disableSubmitButton();
   }
 
   enableValidation() {
-    this._setEventListeners(); // Initialize event listeners for inputs
+    this._setEventListeners();
   }
 }
 

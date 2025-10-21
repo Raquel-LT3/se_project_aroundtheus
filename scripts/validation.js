@@ -1,4 +1,4 @@
-// scripys/validation.js
+// scripts/validation.js
 
 // This module exports a configuration object for form validation in a modal dialog.
 
