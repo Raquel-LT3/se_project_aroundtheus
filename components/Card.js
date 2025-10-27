@@ -57,3 +57,4 @@ export default class Card {
     return this._cardElement;
   } // Returns the card element with all event listeners set up
 }
+
