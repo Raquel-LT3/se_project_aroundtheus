@@ -1,0 +1,14 @@
+/* In src/pages/index.css */
+
+/* Reaching vendor/ in the Project Root */
+@import url(../vendor/normalize.css); 
+@import url(../vendor/fonts.css);
+
+/* Reaching blocks/ (a sibling folder to pages/ inside src/) */
+@import url(./blocks/page.css); 
+@import url(./blocks/content.css);
+@import url(./blocks/header.css);
+@import url(./blocks/profile.css);
+@import url(./blocks/cards.css);
+@import url(./blocks/modal.css);
+@import url(./blocks/footer.css);

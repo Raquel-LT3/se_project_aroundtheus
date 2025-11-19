@@ -1,3 +1,5 @@
+// webpack.config.js
+
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
@@ -6,8 +8,9 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   devtool: "inline-source-map",
   entry: {
-    main: "./src/pages/index.js",
-  },
+  // 🔑 CRITICAL FIX: Point to the actual location of index.js
+  main: "./src/pages/index.js", 
+},
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "main.js",
@@ -26,17 +29,18 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        loader: "babel-loader",
-        exclude: "/node_modules/",
-      },
+      // ... (other rules)
       {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
+            options: {
+              // <--- ADD THE OPTIONS BLOCK HERE
+              importLoaders: 1, // Fixes pathing for @import statements inside CSS
+              url: true, // Ensures Webpack resolves paths for fonts and images
+            },
           },
           "postcss-loader",
         ],
@@ -48,11 +52,13 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: "./src/index.html",
-      favicon: path.resolve(__dirname, "src/images/Around-the-U.S.svg"),
-      inject: true,
-    }),
+    // In webpack.config.js -> plugins array
+new HtmlWebpackPlugin({
+  //  Tell Webpack to use your index.html file
+  template: './index.html',
+  // ... (existing options like favicon)
+  favicon: './orange-blob.ico', // Use the actual favicon from your root directory
+}),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
   ],
