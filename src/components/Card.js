@@ -1,6 +1,6 @@
 export default class Card {
   constructor(
-    { name, link, _id = Date.now().toString(), likes = [] }, // <-- defaults
+    { name, link, _id, likes = [], isLiked }, // Destructure isLiked from data
     cardSelector,
     handleCardClick,
     handleLikeClick,
@@ -11,6 +11,7 @@ export default class Card {
     this._link = link;
     this._id = _id;
     this._likes = likes;
+    this._isLiked = isLiked; // Store the initial like status
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
     this._handleLikeClick = handleLikeClick;
@@ -27,6 +28,7 @@ export default class Card {
 
   _setEventListeners() {
     this._likeButton.addEventListener("click", () => {
+      // Pass the current state to the handleLikeClick function
       this._handleLikeClick(
         this._id,
         this.isLiked(),
@@ -43,8 +45,18 @@ export default class Card {
     });
   }
 
-  _updateLikes(newLikes) {
-    this._likes = newLikes;
+  _updateLikes(data) {
+    // Update our internal boolean if the server provided one
+    if (data && typeof data.isLiked === "boolean") {
+      this._isLiked = data.isLiked;
+    }
+
+    // Update the internal array if provided
+    if (data && Array.isArray(data.likes)) {
+      this._likes = data.likes;
+    }
+
+    // Toggle the active class
     if (this.isLiked()) {
       this._likeButton.classList.add("card__like-button_active");
     } else {
@@ -53,16 +65,23 @@ export default class Card {
   }
 
   isLiked() {
-    return this._likes.includes(this._userId);
+    // If the server provided a boolean flag, it's the most reliable
+    if (typeof this._isLiked === "boolean") {
+      return this._isLiked;
+    }
+
+    // Fallback: manually check if our ID is in the likes array
+    return (this._likes || []).some((like) => {
+      const likeId = like && like._id ? like._id : like;
+      return likeId === this._userId;
+    });
   }
 
   getView() {
     this._cardElement = this._getTemplate();
 
     this._likeButton = this._cardElement.querySelector(".card__like-button");
-    this._deleteButton = this._cardElement.querySelector(
-      ".card__delete-button"
-    );
+    this._deleteButton = this._cardElement.querySelector(".card__delete-button");
     this._cardImage = this._cardElement.querySelector(".card__image");
     this._cardTitle = this._cardElement.querySelector(".card__title");
 
@@ -70,7 +89,12 @@ export default class Card {
     this._cardImage.alt = this._name;
     this._cardTitle.textContent = this._name;
 
-    this._updateLikes(this._likes); // set initial like state
+    // Set the initial visual state of the heart
+    this._updateLikes({
+      likes: this._likes,
+      isLiked: this._isLiked,
+    });
+
     this._setEventListeners();
 
     return this._cardElement;

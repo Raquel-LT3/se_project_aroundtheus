@@ -8,13 +8,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   devtool: "inline-source-map",
   entry: {
-  // 🔑 CRITICAL FIX: Point to the actual location of index.js
-  main: "./src/pages/index.js", 
-},
+    // 🔑 CRITICAL FIX: Point to the actual location of index.js
+    main: "./src/pages/index.js",
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "main.js",
     publicPath: "/",
+    clean: true,
   },
   target: ["web", "es5"],
   stats: "errors-only",
@@ -47,19 +48,23 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|webp|gif|woff(2)?|eot|ttf|otf|ico)$/,
-        type: "asset/resource",
+    type: "asset/resource",
+    generator: {
+      // Keep this for the output directory
+      filename: "images/[name].[ext]",
+    },
       },
     ],
   },
   plugins: [
     // In webpack.config.js -> plugins array
-new HtmlWebpackPlugin({
-  //  Tell Webpack to use your index.html file
-  template: './index.html',
-  // ... (existing options like favicon)
-  favicon: './orange-blob.ico', // Use the actual favicon from your root directory
+    new HtmlWebpackPlugin({
+    //  Tell Webpack to use your index.html file
+    template: "./index.html",
+    //  Update the favicon path to point into the 'src/images' folder
+    favicon: "./src/images/favicon.ico", // 
 }),
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin(),
+new CleanWebpackPlugin(),
+new MiniCssExtractPlugin(),
   ],
 };

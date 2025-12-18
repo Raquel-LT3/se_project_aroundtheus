@@ -2,7 +2,6 @@
   font-family: "Inter", Arial, Helvetica, sans-serif;
   font-weight: 900;
   margin-top: 51px;
-
 }
 
 .card {
@@ -26,6 +25,9 @@
 .card__image {
   width: 282px;
   height: 282px;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px 10px 0 0;
 }
 
 .card__description {
@@ -66,7 +68,8 @@
 }
 
 .card__like-button_active {
-  background-image: url(../images/like-button.svg);
+  /* Use the full 'background' shorthand to overwrite the base class completely */
+  background: transparent url(../images/like-button.svg) center no-repeat !important;
 }
 
 .card__delete-button {

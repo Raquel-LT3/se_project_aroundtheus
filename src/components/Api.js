@@ -8,7 +8,9 @@ export default class Api {
   async _handleResponse(res) {
     if (res.ok) return res.json();
     const errorText = await res.text();
-    return Promise.reject(`Error ${res.status}: ${errorText || res.statusText}`);
+    return Promise.reject(
+      `Error ${res.status}: ${errorText || res.statusText}`
+    );
   }
 
   // ----- User Info -----
@@ -57,6 +59,7 @@ export default class Api {
   }
 
   // ----- Likes -----
+
   addLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "PUT",

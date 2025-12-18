@@ -1,19 +1,36 @@
-// In src/pages/index.js 
+// In src/pages/index.js
 
 // ---------------- IMPORT FIXES ----------------
+
+import logoImage from "../images/app-logo.svg";
+import avatarImage from "../images/profile-pic.jpg";
 import Card from "../components/Card.js";
-import PopupWithConfirmation from "../components/PopupWithConfirmation.js"; 
+import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
 import FormValidator from "../components/FormValidator.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import Section from "../components/Section.js";
-// ✅ CRITICAL FIX: Add the Api import
-import Api from "../components/Api.js"; 
 
-import { config } from "../scripts/validation.js";     
-import { API_CONFIG } from "../utils/constants.js";   
-import "../index.css"; 
+import Api from "../components/Api.js";
+import { config } from "../scripts/validation.js";
+import { API_CONFIG } from "../utils/constants.js";
+import "../index.css";
+
+let userId;
+
+// ---------------- IMAGE INSERTION (The Fix for 404s) ----------------
+const headerImage = document.querySelector(".header__image");
+const profileImage = document.querySelector(".profile__image");
+
+if (headerImage) {
+  headerImage.src = logoImage;
+}
+
+if (profileImage) {
+  profileImage.src = avatarImage;
+}
+// ---------------- END IMAGE INSERTION ----------------
 
 // ---------------- API INITIALIZATION ----------------
 const api = new Api(API_CONFIG); // Api is now defined!
@@ -23,7 +40,9 @@ const profileEditButton = document.querySelector("#profile-edit-button");
 const addNewCardButton = document.querySelector(".profile__add-button");
 const profileImageWrapper = document.querySelector(".profile__image-wrapper");
 const profileTitleInput = document.querySelector("#profile-title-input");
-const profileDescriptionInput = document.querySelector("#profile-description-input");
+const profileDescriptionInput = document.querySelector(
+  "#profile-description-input"
+);
 
 const formValidators = {};
 
@@ -51,14 +70,19 @@ function createCard(data) {
     "#card-template",
     (cardData) => imagePreviewPopup.open(cardData),
     (cardId, isLiked, updateLikes) => {
-      // Like / Unlike
       const likeAction = isLiked ? api.removeLike(cardId) : api.addLike(cardId);
+
       likeAction
-        .then((updatedCard) => updateLikes(updatedCard.likes))
-        .catch(console.error);
+        .then((updatedCardFromServer) => {
+          // Pass the WHOLE object so Card._updateLikes can read .isLiked and .likes
+          console.log("Full data to card:", updatedCardFromServer);
+          updateLikes(updatedCardFromServer);
+        })
+        .catch((err) => {
+          console.error("Error updating likes:", err);
+        });
     },
     (cardId, cardElement) => {
-      // Delete Card
       confirmDeletePopup.setSubmitAction(() => {
         api
           .deleteCard(cardId)
@@ -70,13 +94,14 @@ function createCard(data) {
       });
       confirmDeletePopup.open();
     },
-    userInfo.getUserId()
+    userId
   );
   return card.getView();
 }
 
 // ---------------- SECTION ----------------
 const cardSection = new Section({
+  items: [], // Start empty
   renderer: (cardData) => cardSection.addItem(createCard(cardData)),
   containerSelector: ".cards__list",
 });
@@ -85,7 +110,9 @@ const cardSection = new Section({
 const editProfilePopup = new PopupWithForm({
   popupSelector: "#profile-edit-modal",
   handleFormSubmit: (formData) => {
-    const submitButton = editProfilePopup.getForm().querySelector(".modal__button");
+    const submitButton = editProfilePopup
+      .getForm()
+      .querySelector(".modal__button");
     submitButton.textContent = "Saving...";
     api
       .setUserInfo({ name: formData.title, about: formData.description })
@@ -179,12 +206,25 @@ enableValidation(config);
 // ---------------- INITIAL LOAD (USER + CARDS) ----------------
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userData, cards]) => {
+    // 1. Set the global variable
+    userId = userData._id;
+
+    // 2. Update UserInfo
     userInfo.setUserInfo({
       name: userData.name,
       job: userData.about,
       avatar: userData.avatar,
       _id: userData._id,
     });
-    cardSection.renderItems(cards.reverse()); // show newest first
+    userInfo.setAvatar(userData.avatar);
+
+    // 3. IMPORTANT: Tell the section how to render using the FRESH userData._id
+    // This ensures userId is NOT undefined when createCard runs
+    const cardsToRender = Array.isArray(cards) ? cards : [];
+    
+    // We clear and re-render to be safe
+    cardSection.renderItems([...cardsToRender].reverse());
   })
-  .catch(console.error);
+  .catch((err) => {
+    console.error("Critical failure during initial load:", err);
+  });
