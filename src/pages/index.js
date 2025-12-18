@@ -1,6 +1,6 @@
 // In src/pages/index.js
 
-// ---------------- IMPORT FIXES ----------------
+// ---------------- IMPORT ----------------
 
 import logoImage from "../images/app-logo.svg";
 import avatarImage from "../images/profile-pic.jpg";
@@ -107,7 +107,7 @@ const cardSection = new Section({
 });
 
 // ---------------- POPUPS (FORMS) ----------------
-const editProfilePopup = new PopupWithForm({
+const editProfilePopup = new PopupWithForm({ // PopupWithForm for editing profile
   popupSelector: "#profile-edit-modal",
   handleFormSubmit: (formData) => {
     const submitButton = editProfilePopup
@@ -131,7 +131,7 @@ const editProfilePopup = new PopupWithForm({
 });
 editProfilePopup.setEventListeners();
 
-const addCardPopup = new PopupWithForm({
+const addCardPopup = new PopupWithForm({ // PopupWithForm for adding new card
   popupSelector: "#profile-add-modal",
   handleFormSubmit: (formData) => {
     const submitButton = addCardPopup.getForm().querySelector(".modal__button");
@@ -149,7 +149,7 @@ const addCardPopup = new PopupWithForm({
 });
 addCardPopup.setEventListeners();
 
-const updateAvatarPopup = new PopupWithForm({
+const updateAvatarPopup = new PopupWithForm({ // PopupWithForm for updating avatar
   popupSelector: "#update-avatar-modal",
   handleFormSubmit: (formData) => {
     const submitButton = updateAvatarPopup
@@ -159,11 +159,11 @@ const updateAvatarPopup = new PopupWithForm({
     api
       .updateAvatar({ avatar: formData.url })
       .then((updatedUser) => {
-        userInfo.setAvatar(updatedUser.avatar); // ✅ updates image directly
-        userInfo.setUserId(updatedUser._id); // (optional but clean)
+        userInfo.setAvatar(updatedUser.avatar); // updates image directly
+        userInfo.setUserId(updatedUser._id); // in case userId changes
         updateAvatarPopup.close();
       })
-      .catch((err) => console.error("Avatar update failed:", err))
+      .catch((err) => console.error("Avatar update failed:", err))  // detailed error message
       .finally(() => {
         submitButton.textContent = "Save";
       });
@@ -173,7 +173,7 @@ const updateAvatarPopup = new PopupWithForm({
 updateAvatarPopup.setEventListeners();
 
 // ---------------- EVENT LISTENERS ----------------
-profileEditButton.addEventListener("click", () => {
+profileEditButton.addEventListener("click", () => { // pre-fill and open edit profile popup
   const current = userInfo.getUserInfo();
   profileTitleInput.value = current.name;
   profileDescriptionInput.value = current.job;
@@ -181,22 +181,22 @@ profileEditButton.addEventListener("click", () => {
   editProfilePopup.open();
 });
 
-addNewCardButton.addEventListener("click", () => {
+addNewCardButton.addEventListener("click", () => { // open add card popup
   formValidators[addCardPopup.getForm().id]?.resetValidation();
   addCardPopup.open();
 });
 
-profileImageWrapper.addEventListener("click", () => {
+profileImageWrapper.addEventListener("click", () => { // open update avatar popup
   formValidators[updateAvatarPopup.getForm().id]?.resetValidation();
   updateAvatarPopup.open();
 });
 
 // ---------------- VALIDATION ----------------
-const enableValidation = (config) => {
-  document.querySelectorAll(config.formSelector).forEach((formElement) => {
+const enableValidation = (config) => { 
+  document.querySelectorAll(config.formSelector).forEach((formElement) => { // iterate over each form
     const key = formElement.id || formElement.name;
     if (!key) return;
-    const validator = new FormValidator(config, formElement);
+    const validator = new FormValidator(config, formElement); // create validator instance
     formValidators[key] = validator;
     validator.enableValidation();
   });
@@ -219,10 +219,10 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
     userInfo.setAvatar(userData.avatar);
 
     // 3. IMPORTANT: Tell the section how to render using the FRESH userData._id
-    // This ensures userId is NOT undefined when createCard runs
+    // (This ensures cards know the correct userId for like/delete logic)
     const cardsToRender = Array.isArray(cards) ? cards : [];
     
-    // We clear and re-render to be safe
+    // 4. Render cards in reverse order to show newest first
     cardSection.renderItems([...cardsToRender].reverse());
   })
   .catch((err) => {

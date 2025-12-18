@@ -1,6 +1,6 @@
 export default class Card {
   constructor(
-    { name, link, _id, likes = [], isLiked }, // Destructure isLiked from data
+    { name, link, _id, likes = [], isLiked }, // accept likes and isLiked from API
     cardSelector,
     handleCardClick,
     handleLikeClick,
@@ -10,8 +10,14 @@ export default class Card {
     this._name = name;
     this._link = link;
     this._id = _id;
-    this._likes = likes;
-    this._isLiked = isLiked; // Store the initial like status
+    this._likes = Array.isArray(likes) ? likes : [];
+    this._isLiked =
+      typeof isLiked === "boolean"
+        ? isLiked
+        : (this._likes || []).some((like) => {
+            const likeId = like && like._id ? like._id : like;
+            return likeId === userId;
+          });
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
     this._handleLikeClick = handleLikeClick;
@@ -28,11 +34,10 @@ export default class Card {
 
   _setEventListeners() {
     this._likeButton.addEventListener("click", () => {
-      // Pass the current state to the handleLikeClick function
       this._handleLikeClick(
         this._id,
         this.isLiked(),
-        this._updateLikes.bind(this)
+        this.updateLikes.bind(this)
       );
     });
 
@@ -45,32 +50,51 @@ export default class Card {
     });
   }
 
-  _updateLikes(data) {
-    // Update our internal boolean if the server provided one
-    if (data && typeof data.isLiked === "boolean") {
-      this._isLiked = data.isLiked;
-    }
-
-    // Update the internal array if provided
-    if (data && Array.isArray(data.likes)) {
-      this._likes = data.likes;
-    }
-
-    // Toggle the active class
-    if (this.isLiked()) {
+  // Purely visual toggle based on this._isLiked
+  _renderLikes() {
+    if (this._isLiked) {
       this._likeButton.classList.add("card__like-button_active");
     } else {
       this._likeButton.classList.remove("card__like-button_active");
     }
   }
 
+  // Flexible updater: accepts a boolean, an object with { isLiked, likes }, or an array
+  updateLikes(payload) {
+    if (typeof payload === "boolean") {
+      this._isLiked = payload;
+    } else if (payload && typeof payload === "object") {
+      if (typeof payload.isLiked === "boolean") {
+        this._isLiked = payload.isLiked;
+      } else if (Array.isArray(payload.likes)) {
+        // determine isLiked from likes array if boolean not provided
+        this._likes = payload.likes;
+        this._isLiked = (this._likes || []).some((like) => {
+          const likeId = like && like._id ? like._id : like;
+          return likeId === this._userId;
+        });
+      } else if (Array.isArray(payload)) {
+        this._likes = payload;
+        this._isLiked = (this._likes || []).some((like) => {
+          const likeId = like && like._id ? like._id : like;
+          return likeId === this._userId;
+        });
+      }
+    } else if (Array.isArray(payload)) {
+      this._likes = payload;
+      this._isLiked = (this._likes || []).some((like) => {
+        const likeId = like && like._id ? like._id : like;
+        return likeId === this._userId;
+      });
+    }
+
+    this._renderLikes();
+  }
+
   isLiked() {
-    // If the server provided a boolean flag, it's the most reliable
     if (typeof this._isLiked === "boolean") {
       return this._isLiked;
     }
-
-    // Fallback: manually check if our ID is in the likes array
     return (this._likes || []).some((like) => {
       const likeId = like && like._id ? like._id : like;
       return likeId === this._userId;
@@ -81,7 +105,9 @@ export default class Card {
     this._cardElement = this._getTemplate();
 
     this._likeButton = this._cardElement.querySelector(".card__like-button");
-    this._deleteButton = this._cardElement.querySelector(".card__delete-button");
+    this._deleteButton = this._cardElement.querySelector(
+      ".card__delete-button"
+    );
     this._cardImage = this._cardElement.querySelector(".card__image");
     this._cardTitle = this._cardElement.querySelector(".card__title");
 
@@ -89,11 +115,8 @@ export default class Card {
     this._cardImage.alt = this._name;
     this._cardTitle.textContent = this._name;
 
-    // Set the initial visual state of the heart
-    this._updateLikes({
-      likes: this._likes,
-      isLiked: this._isLiked,
-    });
+    // Initialize visual state using stored data
+    this._renderLikes();
 
     this._setEventListeners();
 

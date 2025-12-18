@@ -68,7 +68,6 @@
 }
 
 .card__like-button_active {
-  /* Use the full 'background' shorthand to overwrite the base class completely */
   background: transparent url(../images/like-button.svg) center no-repeat !important;
 }
 

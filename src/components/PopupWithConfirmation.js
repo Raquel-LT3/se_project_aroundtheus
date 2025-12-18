@@ -5,7 +5,8 @@ export default class PopupWithConfirmation extends Popup {
   constructor({ popupSelector }) {
     super({ popupSelector });
     this._confirmButton = this._popup.querySelector(".modal__button-confirmation");
-    this._form = this._popup.querySelector(".modal__form"); // grab the form
+    this._form = this._popup.querySelector(".modal__form"); // grab the form element
+    this._handleSubmitAction = null; // placeholder for the submit action callback
   }
 
   setSubmitAction(action) {
@@ -16,7 +17,7 @@ export default class PopupWithConfirmation extends Popup {
     super.setEventListeners();
 
     this._form.addEventListener("submit", (evt) => {
-      evt.preventDefault(); // ✅ prevent page reload
+      evt.preventDefault(); // prevent page reload
       if (this._handleSubmitAction) {
         this._handleSubmitAction();
       }

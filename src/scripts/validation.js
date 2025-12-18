@@ -11,4 +11,4 @@ const config = {
   errorClass: "modal__error_visible",
 };
 
-export { config };
+export { config }; // Export the configuration object
